@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 
-public final class Main {
+public final class MainOrdenacion {
 
     private static final List<Function<int[], ResultadoOrdenacion>> ALGORITMOS = List.of(
             Ordenacion::bubbleSort,
@@ -13,7 +13,7 @@ public final class Main {
             Ordenacion::insertionSort,
             Ordenacion::shellSort);
 
-    private Main() {
+    private MainOrdenacion() {
     }
 
     public static void main(String[] args) {

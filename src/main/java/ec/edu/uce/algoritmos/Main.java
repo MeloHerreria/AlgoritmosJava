@@ -12,14 +12,14 @@ public class Main {
 
         activity1();
         activity2();
-
-        // The activities from the other team members are added here:
-        // activity3();
+        MainOrdenacion.main(args);
         // activity4();
 
         System.out.println("\n================================");
         System.out.println("        END OF PROGRAM");
         System.out.println("================================");
+
+
     }
 
     // ================= ACTIVITY 1 =================
@@ -146,4 +146,6 @@ public class Main {
             System.out.println("Recursive sum: StackOverflowError (the call stack was exhausted)");
         }
     }
+
+
 }
