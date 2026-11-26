@@ -9,7 +9,7 @@
 ### Project Team
 - **Team Member 1:** Melanie Herreria
 - **Team Member 2:** Andy Lopez
-- **Team Member 3:** Anthony Aquinotoa
+- **Team Member 3:** Anthony Quinatoa
 
 ---
 
