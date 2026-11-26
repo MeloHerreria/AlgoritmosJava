@@ -1,0 +1,7 @@
+Sistema operativo : Windows 10 10.0 (amd64)
+Procesador        : Intel64 Family 6 Model 142 Stepping 9, GenuineIntel
+Núcleos lógicos   : 4
+Memoria máx. JVM  : 2016 MB
+Java              : 21.0.2 (OpenJDK 64-Bit Server VM)
+Repeticiones      : 10 medidas + 1 de descarte por combinación
+Semilla base      : 20261126

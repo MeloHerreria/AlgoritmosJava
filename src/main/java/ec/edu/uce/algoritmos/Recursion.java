@@ -1,9 +1,9 @@
+
 package ec.edu.uce.algoritmos;
 
 public class Recursion {
 
-    // RECURSIVE FACTORIAL - Time O(n), space O(n) due to the call stack
-    // Base case: n <= 1. Counts the multiplications: n - 1
+    // FACTORIAL RECURSIVO
     public static long factorial(int n, int[] operations) {
 
         if (n < 0 || n > 20) {
@@ -21,10 +21,9 @@ public class Recursion {
         return n * factorial(n - 1, operations);
     }
 
-    // RECURSIVE SUM - Time O(n), space O(n) due to the call stack
-    // Called with index = 0. Base case: index == numbers.length
-    // Counts the additions: n
-    public static long arraySum(int[] numbers, int index, int[] operations) {
+    // SUMA RECURSIVA
+    public static long arraySum(
+            int[] numbers, int index, int[] operations) {
 
         if (numbers == null || numbers.length == 0) {
             throw new IllegalArgumentException(
@@ -38,13 +37,13 @@ public class Recursion {
 
         operations[0]++;
 
-        return numbers[index] + arraySum(numbers, index + 1, operations);
+        return numbers[index] +
+                arraySum(numbers, index + 1, operations);
     }
 
-    // RECURSIVE MAXIMUM - Time O(n), space O(n) due to the call stack
-    // Called with index = 0. Base case: last element of the array
-    // Counts the comparisons: n - 1
-    public static int arrayMax(int[] numbers, int index, int[] operations) {
+    // MÁXIMO RECURSIVO
+    public static int arrayMax(
+            int[] numbers, int index, int[] operations) {
 
         if (numbers == null || numbers.length == 0) {
             throw new IllegalArgumentException(
@@ -56,7 +55,9 @@ public class Recursion {
             return numbers[index];
         }
 
-        int remainingMax = arrayMax(numbers, index + 1, operations);
+        int remainingMax = arrayMax(
+                numbers, index + 1, operations
+        );
 
         operations[0]++;
 
@@ -64,6 +65,96 @@ public class Recursion {
             return numbers[index];
         } else {
             return remainingMax;
+        }
+    }
+
+    // =========================================
+    // MÉTODOS COMPATIBLES CON DEMOSTRACIONES
+    // =========================================
+
+    public static long factorial(int n) {
+        int[] operations = {0};
+        return factorial(n, operations);
+    }
+
+    public static long factorial(int n, Metricas metricas) {
+        validarMetricas(metricas);
+
+        int[] operations = {0};
+        long resultado = factorial(n, operations);
+
+        int llamadas = Math.max(1, n);
+        registrarLlamadas(llamadas, metricas);
+        registrarOperaciones(operations[0], metricas);
+
+        return resultado;
+    }
+
+    public static long suma(int[] datos) {
+        int[] operations = {0};
+        return arraySum(datos, 0, operations);
+    }
+
+    public static long suma(int[] datos, Metricas metricas) {
+        validarMetricas(metricas);
+        validarArreglo(datos);
+
+        int[] operations = {0};
+        long resultado = arraySum(datos, 0, operations);
+
+        registrarLlamadas(datos.length + 1, metricas);
+        registrarOperaciones(operations[0], metricas);
+
+        return resultado;
+    }
+
+    public static int maximo(int[] datos) {
+        int[] operations = {0};
+        return arrayMax(datos, 0, operations);
+    }
+
+    public static int maximo(int[] datos, Metricas metricas) {
+        validarMetricas(metricas);
+        validarArreglo(datos);
+
+        int[] operations = {0};
+        int resultado = arrayMax(datos, 0, operations);
+
+        registrarLlamadas(datos.length, metricas);
+        registrarOperaciones(operations[0], metricas);
+
+        return resultado;
+    }
+
+    private static void validarMetricas(Metricas metricas) {
+        if (metricas == null) {
+            throw new IllegalArgumentException(
+                    "Metricas cannot be null."
+            );
+        }
+    }
+
+    private static void validarArreglo(int[] datos) {
+        if (datos == null || datos.length == 0) {
+            throw new IllegalArgumentException(
+                    "The array cannot be empty."
+            );
+        }
+    }
+
+    private static void registrarOperaciones(
+            int cantidad, Metricas metricas) {
+
+        for (int i = 0; i < cantidad; i++) {
+            metricas.operacion();
+        }
+    }
+
+    private static void registrarLlamadas(
+            int cantidad, Metricas metricas) {
+
+        for (int i = 0; i < cantidad; i++) {
+            metricas.llamada();
         }
     }
 }

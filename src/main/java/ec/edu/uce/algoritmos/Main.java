@@ -1,151 +1,215 @@
+
 package ec.edu.uce.algoritmos;
 
-import java.util.Random;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Path;
+import java.util.Scanner;
 
-public class Main {
+public final class Main {
 
-    public static void main(String[] args) {
+    private static final Path SALIDA_POR_DEFECTO =
+            Path.of("resultados", "tablas");
 
-        System.out.println("================================");
-        System.out.println("      ALGORITHMS PROJECT");
-        System.out.println("================================");
-
-        activity1();
-        activity2();
-        MainOrdenacion.main(args);
-        // activity4();
-
-        System.out.println("\n================================");
-        System.out.println("        END OF PROGRAM");
-        System.out.println("================================");
-
-
+    private Main() {
     }
 
-    // ================= ACTIVITY 1 =================
-    private static void activity1() {
+    public static void main(String[] args) throws IOException {
 
-        System.out.println("\n================================");
-        System.out.println("          ACTIVITY 1");
-        System.out.println("================================");
+        PrintStream out = System.out;
+        Path salida = SALIDA_POR_DEFECTO;
 
-        int[] data = {5, 10, 15, 20};
+        boolean ejecutarTodo = false;
+        int actividad = 0;
 
-        System.out.println("\n--- ALGORITHM A: O(n) ---");
-        Complejidad.linearSum(data);
+        // Procesar argumentos
+        for (int i = 0; i < args.length; i++) {
 
-        System.out.println("\n--- ALGORITHM B: O(n^2) ---");
-        Complejidad.quadraticComparison(data);
+            switch (args[i]) {
 
-        System.out.println("\n--- ALGORITHM C: O(log n) ---");
-        Complejidad.halve(20);
+                case "--todo" -> ejecutarTodo = true;
 
-        int[] sizes = {10, 100, 1000, 10000};
-        Random random = new Random();
+                case "--actividad" ->
+                        actividad = i + 1 < args.length
+                                ? parsear(args[++i]) : -1;
 
-        System.out.println("\n--- TESTS WITH DIFFERENT SIZES ---");
+                case "--salida" -> {
+                    if (i + 1 < args.length) {
+                        salida = Path.of(args[++i]);
+                    }
+                }
 
-        for (int n : sizes) {
+                default -> {
+                    out.println("Argumento no reconocido: " + args[i]);
+                    return;
+                }
+            }
+        }
 
-            int[] numbers = new int[n];
+        if (ejecutarTodo) {
+            ejecutarTodas(out, salida);
 
-            for (int i = 0; i < n; i++) {
-                numbers[i] = random.nextInt(1000) + 1;
+        } else if (actividad != 0) {
+
+            if (!ejecutarActividad(actividad, out, salida)) {
+                out.println("Actividad no válida. Use un número del 1 al 4.");
             }
 
-            System.out.println("\nArray size: " + n);
-
-            Complejidad.linearSum(numbers);
-            Complejidad.quadraticComparison(numbers);
-            Complejidad.halve(n);
+        } else {
+            mostrarMenu(out, salida);
         }
     }
 
-    // ================= ACTIVITY 2 =================
-    private static void activity2() {
+    // =========================================
+    // MENÚ PRINCIPAL
+    // =========================================
 
-        System.out.println("\n================================");
-        System.out.println("          ACTIVITY 2");
-        System.out.println("================================");
+    private static void mostrarMenu(
+            PrintStream out, Path salida) throws IOException {
 
-        int number = 5;
-        int[] values = {8, 3, 10, 2, 7};
+        Scanner teclado = new Scanner(System.in);
 
-        int[] operations = {0};
-        long start;
-        long elapsed;
+        while (true) {
 
-        // ---------- FACTORIAL ----------
-        System.out.println("\n--- FACTORIAL ---");
+            out.println();
+            out.println("==================================================");
+            out.println("       TAREA GRUPAL INTEGRADORA - ALGORITMOS");
+            out.println("       UNIVERSIDAD CENTRAL DEL ECUADOR");
+            out.println("==================================================");
 
-        operations[0] = 0;
-        start = System.nanoTime();
-        long iterativeFactorial = Iteracion.factorial(number, operations);
-        elapsed = System.nanoTime() - start;
-        System.out.println("Iterative: " + iterativeFactorial
-                + " | Operations: " + operations[0] + " | Time: " + elapsed + " ns");
+            out.println("1. Actividad 1 - Análisis de complejidad");
+            out.println("2. Actividad 2 - Iterativo vs recursivo");
+            out.println("3. Actividad 3 - Algoritmos de ordenación");
+            out.println("4. Actividad 4 - Benchmark y comparación experimental");
+            out.println("5. Ejecutar todas las actividades");
+            out.println("6. Contexto académico - Registros y calificaciones");
+            out.println("0. Salir");
 
-        operations[0] = 0;
-        start = System.nanoTime();
-        long recursiveFactorial = Recursion.factorial(number, operations);
-        elapsed = System.nanoTime() - start;
-        System.out.println("Recursive: " + recursiveFactorial
-                + " | Operations: " + operations[0] + " | Time: " + elapsed + " ns");
+            out.println("--------------------------------------------------");
+            out.print("Seleccione una opción: ");
 
-        System.out.println("Do the results match? " + (iterativeFactorial == recursiveFactorial));
+            if (!teclado.hasNextLine()) {
+                return;
+            }
 
-        // ---------- ARRAY SUM ----------
-        System.out.println("\n--- ARRAY SUM ---");
+            String opcion = teclado.nextLine().trim();
 
-        operations[0] = 0;
-        start = System.nanoTime();
-        long iterativeSum = Iteracion.arraySum(values, operations);
-        elapsed = System.nanoTime() - start;
-        System.out.println("Iterative: " + iterativeSum
-                + " | Operations: " + operations[0] + " | Time: " + elapsed + " ns");
+            switch (opcion) {
 
-        operations[0] = 0;
-        start = System.nanoTime();
-        long recursiveSum = Recursion.arraySum(values, 0, operations);
-        elapsed = System.nanoTime() - start;
-        System.out.println("Recursive: " + recursiveSum
-                + " | Operations: " + operations[0] + " | Time: " + elapsed + " ns");
+                case "0" -> {
+                    out.println("Programa finalizado.");
+                    return;
+                }
 
-        System.out.println("Do the results match? " + (iterativeSum == recursiveSum));
+                case "5" -> ejecutarTodas(out, salida);
 
-        // ---------- ARRAY MAXIMUM ----------
-        System.out.println("\n--- ARRAY MAXIMUM ---");
+                case "6" -> {
+                    encabezado(out, "CONTEXTO ACADÉMICO");
+                    Demostraciones.contextoAcademico(out);
+                }
 
-        operations[0] = 0;
-        start = System.nanoTime();
-        int iterativeMax = Iteracion.arrayMax(values, operations);
-        elapsed = System.nanoTime() - start;
-        System.out.println("Iterative: " + iterativeMax
-                + " | Comparisons: " + operations[0] + " | Time: " + elapsed + " ns");
+                default -> {
+                    int numero = parsear(opcion);
 
-        operations[0] = 0;
-        start = System.nanoTime();
-        int recursiveMax = Recursion.arrayMax(values, 0, operations);
-        elapsed = System.nanoTime() - start;
-        System.out.println("Recursive: " + recursiveMax
-                + " | Comparisons: " + operations[0] + " | Time: " + elapsed + " ns");
+                    if (!ejecutarActividad(numero, out, salida)) {
+                        out.println("Opción no válida.");
+                    }
+                }
+            }
+        }
+    }
 
-        System.out.println("Do the results match? " + (iterativeMax == recursiveMax));
+    // =========================================
+    // EJECUTAR UNA ACTIVIDAD
+    // =========================================
 
-        // ---------- STACK OVERFLOW RISK ----------
-        System.out.println("\n--- STACK OVERFLOW (array of 1,000,000 elements) ---");
+    private static boolean ejecutarActividad(
+            int actividad, PrintStream out, Path salida)
+            throws IOException {
 
-        int[] huge = new int[1000000];
-        operations[0] = 0;
+        switch (actividad) {
 
-        System.out.println("Iterative sum: " + Iteracion.arraySum(huge, operations));
+            case 1 -> {
+                encabezado(out, "ACTIVIDAD 1 - ANÁLISIS DE COMPLEJIDAD");
+                Demostraciones.actividad1(out, salida);
+            }
+
+            case 2 -> {
+                encabezado(out, "ACTIVIDAD 2 - ITERATIVO VS RECURSIVO");
+                Demostraciones.actividad2(out, salida);
+            }
+
+            case 3 -> {
+                encabezado(out, "ACTIVIDAD 3 - ALGORITMOS DE ORDENACIÓN");
+                Demostraciones.actividad3(out);
+            }
+
+            case 4 -> {
+                encabezado(out, "ACTIVIDAD 4 - BENCHMARK");
+                Demostraciones.actividad4(out, salida);
+            }
+
+            default -> {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // =========================================
+    // EJECUTAR TODO EN ORDEN
+    // =========================================
+
+    private static void ejecutarTodas(
+            PrintStream out, Path salida) throws IOException {
+
+        out.println();
+        out.println("==================================================");
+        out.println("          EJECUCIÓN COMPLETA DEL PROYECTO");
+        out.println("==================================================");
+
+        ejecutarActividad(1, out, salida);
+
+        ejecutarActividad(2, out, salida);
+
+        ejecutarActividad(3, out, salida);
+
+        encabezado(out, "CONTEXTO ACADÉMICO");
+        Demostraciones.contextoAcademico(out);
+
+        ejecutarActividad(4, out, salida);
+
+        out.println();
+        out.println("==================================================");
+        out.println("          TODAS LAS ACTIVIDADES FINALIZADAS");
+        out.println("==================================================");
+    }
+
+    // =========================================
+    // ENCABEZADOS
+    // =========================================
+
+    private static void encabezado(
+            PrintStream out, String titulo) {
+
+        out.println();
+        out.println("==================================================");
+        out.println(" " + titulo);
+        out.println("==================================================");
+    }
+
+    // =========================================
+    // CONVERSIÓN DE OPCIONES
+    // =========================================
+
+    private static int parsear(String texto) {
 
         try {
-            System.out.println("Recursive sum: " + Recursion.arraySum(huge, 0, operations));
-        } catch (StackOverflowError e) {
-            System.out.println("Recursive sum: StackOverflowError (the call stack was exhausted)");
+            return Integer.parseInt(texto.trim());
+
+        } catch (NumberFormatException e) {
+            return -1;
         }
     }
-
-
 }

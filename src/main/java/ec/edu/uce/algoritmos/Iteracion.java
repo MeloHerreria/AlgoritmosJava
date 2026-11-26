@@ -1,9 +1,9 @@
+
 package ec.edu.uce.algoritmos;
 
 public class Iteracion {
 
-    // ITERATIVE FACTORIAL - Time O(n), space O(1)
-    // Counts the multiplications: n - 1 (the loop starts at 2)
+    // FACTORIAL ITERATIVO
     public static long factorial(int n, int[] operations) {
 
         if (n < 0 || n > 20) {
@@ -22,8 +22,7 @@ public class Iteracion {
         return result;
     }
 
-    // ITERATIVE SUM - Time O(n), space O(1)
-    // Counts the additions: n
+    // SUMA ITERATIVA
     public static long arraySum(int[] numbers, int[] operations) {
 
         if (numbers == null || numbers.length == 0) {
@@ -42,8 +41,7 @@ public class Iteracion {
         return sum;
     }
 
-    // ITERATIVE MAXIMUM - Time O(n), space O(1)
-    // Counts the comparisons: n - 1
+    // MÁXIMO ITERATIVO
     public static int arrayMax(int[] numbers, int[] operations) {
 
         if (numbers == null || numbers.length == 0) {
@@ -63,5 +61,73 @@ public class Iteracion {
         }
 
         return max;
+    }
+
+    // =========================================
+    // MÉTODOS COMPATIBLES CON DEMOSTRACIONES
+    // =========================================
+
+    public static long factorial(int n) {
+        int[] operations = {0};
+        return factorial(n, operations);
+    }
+
+    public static long factorial(int n, Metricas metricas) {
+        validarMetricas(metricas);
+
+        int[] operations = {0};
+        long resultado = factorial(n, operations);
+
+        registrarOperaciones(operations[0], metricas);
+
+        return resultado;
+    }
+
+    public static long suma(int[] datos) {
+        int[] operations = {0};
+        return arraySum(datos, operations);
+    }
+
+    public static long suma(int[] datos, Metricas metricas) {
+        validarMetricas(metricas);
+
+        int[] operations = {0};
+        long resultado = arraySum(datos, operations);
+
+        registrarOperaciones(operations[0], metricas);
+
+        return resultado;
+    }
+
+    public static int maximo(int[] datos) {
+        int[] operations = {0};
+        return arrayMax(datos, operations);
+    }
+
+    public static int maximo(int[] datos, Metricas metricas) {
+        validarMetricas(metricas);
+
+        int[] operations = {0};
+        int resultado = arrayMax(datos, operations);
+
+        registrarOperaciones(operations[0], metricas);
+
+        return resultado;
+    }
+
+    private static void validarMetricas(Metricas metricas) {
+        if (metricas == null) {
+            throw new IllegalArgumentException(
+                    "Metricas cannot be null."
+            );
+        }
+    }
+
+    private static void registrarOperaciones(
+            int cantidad, Metricas metricas) {
+
+        for (int i = 0; i < cantidad; i++) {
+            metricas.operacion();
+        }
     }
 }

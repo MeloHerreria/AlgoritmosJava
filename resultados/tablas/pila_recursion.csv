@@ -1,0 +1,9 @@
+n,iterativa,recursiva
+1000,OK,OK
+5000,OK,OK
+10000,OK,OK
+25000,OK,OK
+50000,OK,StackOverflowError
+100000,OK,StackOverflowError
+500000,OK,StackOverflowError
+1000000,OK,StackOverflowError
